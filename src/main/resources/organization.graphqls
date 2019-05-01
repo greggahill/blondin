@@ -1,0 +1,13 @@
+type Organization {
+    id: ID!
+    name: String!
+}
+
+type Query {
+    findAllOrganizations: [Organization]!
+    countOrganizations: Long!
+}
+
+type Mutation {
+    newOrganization(name: String!) : Organization!
+}

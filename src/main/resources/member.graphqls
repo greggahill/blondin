@@ -1,0 +1,17 @@
+type Member {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    organization: Organization
+}
+
+extend type Query {
+    findAllMembers: [Member]!
+    countMembers: Long!
+}
+
+extend type Mutation {
+    newMember(firstName: String!, lastName: String!, organization: ID!) : Member!
+    deleteMember(id: ID!) : Boolean
+    #updateBookPageCount(pageCount: Int!, id: ID!) : Book!
+}

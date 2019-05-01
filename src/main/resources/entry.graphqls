@@ -1,0 +1,19 @@
+type Entry {
+    id: ID!
+    datetime: String!
+    reason: String!
+    points: Int!
+    member: Member
+}
+
+extend type Query {
+    findAllEntries: [Entry]!
+    findAllEntriesByMemberID(member: ID!): [Entry]!
+    getAvailablePointsByMemberID(member: ID!): Int!
+    countEntries: Long!
+}
+
+extend type Mutation {
+    newEntry(datetime: String!, reason: String!, points: Int!, member: ID!) : Entry!
+    deleteEntry(id: ID!) : Boolean
+}
