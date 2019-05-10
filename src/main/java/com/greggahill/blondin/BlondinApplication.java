@@ -4,9 +4,7 @@ import com.greggahill.blondin.exceptions.GraphQLErrorAdapter;
 
 import com.greggahill.blondin.model.Member;
 import com.greggahill.blondin.model.Organization;
-import com.greggahill.blondin.repository.EntryRepository;
-import com.greggahill.blondin.repository.MemberRepository;
-import com.greggahill.blondin.repository.OrganizationRepository;
+import com.greggahill.blondin.repository.*;
 import com.greggahill.blondin.resolver.EntryResolver;
 import com.greggahill.blondin.resolver.MemberResolver;
 import com.greggahill.blondin.resolver.Mutation;
@@ -18,6 +16,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,11 @@ public class BlondinApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BlondinApplication.class, args);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -68,17 +72,20 @@ public class BlondinApplication {
     }
 
     @Bean
-    public Query query(OrganizationRepository organizationRepository, MemberRepository memberRepository, EntryRepository entryRepository) {
-        return new Query(organizationRepository, memberRepository, entryRepository);
+    public Query query(UserRepository userRepository, LoginRepository loginRepository,
+                       OrganizationRepository organizationRepository, MemberRepository memberRepository,
+                       EntryRepository entryRepository) {
+        return new Query(userRepository, loginRepository, organizationRepository, memberRepository, entryRepository);
     }
 
     @Bean
-    public Mutation mutation(OrganizationRepository organizationRepository, MemberRepository memberRepository, EntryRepository entryRepository) {
-        return new Mutation(organizationRepository, memberRepository, entryRepository);
+    public Mutation mutation(UserRepository userRepository, OrganizationRepository organizationRepository,
+                             MemberRepository memberRepository, EntryRepository entryRepository) {
+        return new Mutation(userRepository, organizationRepository, memberRepository, entryRepository);
     }
 
     @Bean
-    public CommandLineRunner demo(OrganizationRepository organizationRepository, MemberRepository memberRepository) {
+    public CommandLineRunner demo(UserRepository userRepository, OrganizationRepository organizationRepository, MemberRepository memberRepository) {
         return (args) -> {
             Organization organization = new Organization("GreggCo");
             organizationRepository.save(organization);

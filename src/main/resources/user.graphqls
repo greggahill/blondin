@@ -1,0 +1,17 @@
+type User {
+    id: ID!
+    userName: String!
+    password: String!
+    organization: Organization
+}
+
+extend type Query {
+    findAllUsers: [User]!
+    loginUser(userName: String!, password: String!) : User!
+    countUsers: Long!
+}
+
+extend type Mutation {
+    newUser(userName: String!, password: String!, organization: ID!) : User!
+    deleteUser(id: ID!) : Boolean
+}
